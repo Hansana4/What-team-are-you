@@ -13,6 +13,9 @@ answer to the linked team, and the highest-scoring team is shown with an
 | `quiz-data.js` | Questions, answers, answer → team mapping, team copy and links |
 | `quiz.js` | Quiz flow, scoring and rendering |
 | `assets/mac_logo.png` | Logo shown on the result screen |
+| `assets/fonts/` | Self-hosted Figtree (no third-party font requests) |
+| `_headers` | Security headers for Cloudflare Pages / Netlify |
+| `SECURITY.md` | Hosting the quiz on a monashcoding.com subdomain safely |
 
 Open `index.html` directly, or serve the folder (`python3 -m http.server`).
 
@@ -37,6 +40,17 @@ The page detects that it is inside an iframe and adapts automatically:
 
 Append `?embed=1` to the URL to force the embedded layout when testing outside an
 iframe. Non-embedded visits keep the full-size layout.
+
+## Security
+
+The page is static, stores nothing, sends nothing, loads no third-party
+resources, and builds every element with `textContent`/`createElement` — so
+there is no injection sink and nothing to exfiltrate. It ships a strict
+Content-Security-Policy in `index.html` and the rest of the header set in
+`_headers`. Before attaching a `monashcoding.com` subdomain, read
+[SECURITY.md](SECURITY.md) — it covers the subdomain-trust items that have to be
+set on the parent domain (host-only cookies, no wildcard CORS, DNS/takeover
+hygiene) and has a deployment checklist.
 
 ## Editing the quiz
 

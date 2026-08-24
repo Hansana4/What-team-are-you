@@ -1,0 +1,17 @@
+# Response headers for Cloudflare Pages / Netlify.
+# GitHub Pages cannot send custom headers — see SECURITY.md for what that costs
+# and how to put the site behind Cloudflare instead.
+#
+# Keep the frame-ancestors list in sync with wherever the quiz is embedded.
+# X-Frame-Options is deliberately NOT set: it has no allowlist, so it would
+# break the Notion embed. frame-ancestors is its modern replacement.
+
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; media-src 'none'; object-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'self' https://monashcoding.com https://*.monashcoding.com https://www.notion.so https://notion.so https://*.notion.site https://*.notion.com; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), clipboard-read=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=()
+  Cross-Origin-Opener-Policy: same-origin
+  Origin-Agent-Cluster: ?1
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  X-Robots-Tag: all
