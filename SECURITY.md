@@ -14,7 +14,10 @@ main site — a static page cannot enforce those from its side).
 
 A fully static page. It has:
 
-- **No backend, no API, no database, no analytics.** Nothing is sent anywhere.
+- **No backend, no API, no database.** The only thing sent anywhere is an
+  anonymous, cookieless counter ping (`GET /e/<event>`, see the README) to the
+  page's own origin; hosts without that endpoint serve a 404 and nothing else
+  happens.
 - **No user input.** Nothing is typed, uploaded, or submitted; the only
   interaction is clicking one of four fixed buttons per question.
 - **No cookies, no `localStorage`, no `sessionStorage`, no service worker.** The

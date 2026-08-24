@@ -24,6 +24,15 @@
 
   OUTCOME_ORDER.forEach((key) => (scores[key] = 0));
 
+  /* Anonymous same-origin counters: a GET the host logs and the page ignores.
+     An image ping stays within the CSP's img-src 'self', so connect-src can
+     remain 'none'. Hosts without an /e/ endpoint (GitHub Pages, local files)
+     return a 404 and nothing else happens. */
+  function track(name) {
+    if (window.location.protocol === "file:") return;
+    new Image().src = "e/" + name;
+  }
+
   function renderQuestion() {
     const question = QUESTIONS[index];
 
@@ -72,6 +81,7 @@
 
   function renderOutcome(key) {
     const outcome = OUTCOMES[key];
+    track("complete?team=" + key);
 
     const logo = document.createElement("img");
     logo.className = "outcome-logo";
@@ -88,21 +98,24 @@
 
     const actions = document.createElement("div");
     actions.className = "outcome-actions";
-    actions.appendChild(link("Apply for MAC!", APPLY_URL));
-    actions.appendChild(link(outcome.learnMoreLabel, outcome.learnMoreUrl));
+    actions.appendChild(link("Apply for MAC!", APPLY_URL, "apply?team=" + key));
+    actions.appendChild(
+      link(outcome.learnMoreLabel, outcome.learnMoreUrl, "learn?team=" + key)
+    );
 
     card.replaceChildren(logo, title, description, actions);
     resetScroll();
     document.title = outcome.title + " | What team are you?";
   }
 
-  function link(label, href) {
+  function link(label, href, event) {
     const anchor = document.createElement("a");
     anchor.className = "btn";
     anchor.href = href;
     anchor.target = "_blank";
     anchor.rel = "noopener noreferrer";
     anchor.textContent = label;
+    anchor.addEventListener("click", () => track(event));
     if (embedded) {
       anchor.addEventListener("click", openOutsideFrame);
     }
@@ -128,5 +141,6 @@
     }
   }
 
+  track("visit");
   renderQuestion();
 })();
