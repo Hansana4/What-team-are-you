@@ -14,6 +14,8 @@
 html,
 body {
   height: 100%;
+  /* Notion (and other embeds) can be dark; the card is always light. */
+  color-scheme: light;
 }
 
 body {
@@ -23,12 +25,16 @@ body {
   font-family: "Figtree", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  /* Keep scrolling inside the iframe instead of scrolling the Notion page. */
+  overscroll-behavior: contain;
 }
 
 .stage {
   min-height: 100%;
   display: flex;
-  align-items: center;
+  /* flex-start + auto margins centres the card without clipping its top
+     when it is taller than a short embed. */
+  align-items: flex-start;
   justify-content: center;
   padding: 40px 24px;
 }
@@ -36,6 +42,7 @@ body {
 .card {
   width: 100%;
   max-width: 800px;
+  margin: auto;
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
@@ -192,5 +199,167 @@ body {
 
   .outcome-description {
     margin-bottom: 32px;
+  }
+}
+
+/* ---------- Embedded mode (Notion iframe & friends) ----------
+   `.is-embedded` is set by quiz.js when the page is inside an iframe, or when
+   the URL carries ?embed=1. Notion cannot resize an embed to fit its content,
+   so embedded + short viewports get progressively tighter spacing to stay
+   inside whatever height the block was dragged to. */
+
+.is-embedded body {
+  background: var(--yellow);
+}
+
+.is-embedded .stage {
+  padding: 14px 12px;
+}
+
+.is-embedded .card {
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  padding: 40px 40px;
+}
+
+.is-embedded .question {
+  font-size: 24px;
+  margin-bottom: 22px;
+}
+
+.is-embedded .option {
+  min-height: 84px;
+  padding: 14px 18px;
+}
+
+.is-embedded .outcome-logo {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 22px;
+}
+
+.is-embedded .outcome-title {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.is-embedded .outcome-description {
+  margin-bottom: 34px;
+}
+
+.is-embedded .outcome-actions {
+  gap: 18px;
+}
+
+/* Short viewports — applies to embeds and small browser windows alike. */
+
+@media (max-height: 640px) {
+  .stage {
+    padding: 14px 12px;
+  }
+
+  .card {
+    padding: 34px 34px;
+    border-radius: 14px;
+  }
+
+  .question {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .option {
+    min-height: 76px;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .options {
+    gap: 12px;
+  }
+
+  .outcome-logo {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 16px;
+  }
+
+  .outcome-title {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  .outcome-description {
+    font-size: 15px;
+    margin-bottom: 26px;
+  }
+
+  .outcome-actions {
+    gap: 14px;
+  }
+
+  .btn {
+    padding: 11px 34px;
+    font-size: 14px;
+  }
+}
+
+@media (max-height: 480px) {
+  .card {
+    padding: 22px 20px;
+    border-radius: 12px;
+  }
+
+  .question {
+    font-size: 19px;
+    margin-bottom: 14px;
+  }
+
+  .option {
+    min-height: 62px;
+    font-size: 13.5px;
+    padding: 10px 14px;
+  }
+
+  .options {
+    gap: 10px;
+  }
+
+  .outcome-logo {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+  }
+
+  .outcome-title {
+    font-size: 22px;
+  }
+
+  .outcome-description {
+    font-size: 14px;
+    line-height: 1.45;
+    margin-bottom: 18px;
+  }
+
+  .outcome-actions {
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 10px 28px;
+    font-size: 13.5px;
+  }
+}
+
+/* Narrow embeds: single column of answers. */
+
+@media (max-width: 520px) {
+  .is-embedded .card {
+    padding: 26px 18px;
+  }
+
+  .options {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
