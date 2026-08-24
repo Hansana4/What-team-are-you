@@ -41,11 +41,22 @@ The page detects that it is inside an iframe and adapts automatically:
 Append `?embed=1` to the URL to force the embedded layout when testing outside an
 iframe. Non-embedded visits keep the full-size layout.
 
+## Counters
+
+The page sends anonymous same-origin pings — `GET /e/visit` on load,
+`/e/complete?team=<key>` when a result is shown, and `/e/apply` / `/e/learn`
+(with the same `team` query) on button clicks. They are plain image requests
+with no cookies and no identifiers, so `connect-src` stays `'none'`; the host
+answers `204` and counts them from its access log. On hosts without an `/e/`
+endpoint (GitHub Pages, `file://`) they 404 or are skipped and nothing else
+happens.
+
 ## Security
 
-The page is static, stores nothing, sends nothing, loads no third-party
-resources, and builds every element with `textContent`/`createElement` — so
-there is no injection sink and nothing to exfiltrate. It ships a strict
+The page is static, stores nothing, loads no third-party resources, sends
+nothing except the anonymous counter pings above, and builds every element with
+`textContent`/`createElement` — so there is no injection sink and nothing to
+exfiltrate. It ships a strict
 Content-Security-Policy in `index.html` and the rest of the header set in
 `_headers`. Before attaching a `monashcoding.com` subdomain, read
 [SECURITY.md](SECURITY.md) — it covers the subdomain-trust items that have to be
